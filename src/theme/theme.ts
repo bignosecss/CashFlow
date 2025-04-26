@@ -1,0 +1,55 @@
+export const theme = {
+  colors: {
+    primaryBtn: '#3B82F6',
+    primaryBtnHover: '#2563EB',
+    background: '#F9FAFB',
+    white: '#FFFFFF',
+    textPrimary: '#111827',
+    textSecondary: '#6B7280',
+    textHint: '#9CA3AF',
+    border: '#D1D5DB',
+    shadow: '#000000',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+  },
+  typography: {
+    h1: 24,
+    h2: 18,
+    body: 16,
+    caption: 14,
+    label: 16,
+    largeTitle: 32,
+    fontFamily: {
+      regular: 'Inter-Regular',
+      medium: 'Inter-Medium',
+      semiBold: 'Inter-SemiBold',
+      bold: 'Inter-Bold',
+    },
+  },
+  spacing: {
+    small: 8,
+    medium: 12,
+    large: 16,
+    xlarge: 20,
+    xxlarge: 24,
+  },
+  borderRadius: {
+    small: 8,
+    medium: 12,
+    large: 16,
+  },
+  button: {
+    height: 48,
+    fabSize: 56,
+    fabPosition: 20,
+  },
+  input: {
+    height: 60,
+    borderRadius: 8,
+  },
+  shadow: {
+    elevation: 2,
+    shadowOpacity: 0.1,
+  },
+};
