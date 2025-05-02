@@ -7,20 +7,20 @@ export type Category = {
 };
 
 export const defaultCategories: Category[] = [
-  { id: 'food', name: '餐饮', type: 'expense', icon: 'utensils', color: '#10B981' },
-  { id: 'transport', name: '交通', type: 'expense', icon: 'car', color: '#3B82F6' },
-  { id: 'daily', name: '日用', type: 'expense', icon: 'shopping-cart', color: '#8B5CF6' },
-  { id: 'entertainment', name: '娱乐', type: 'expense', icon: 'gamepad-2', color: '#EC4899' },
-  { id: 'clothes', name: '服饰', type: 'expense', icon: 'shirt', color: '#F59E0B' },
-  { id: 'medical', name: '医疗', type: 'expense', icon: 'pill', color: '#EF4444' },
-  { id: 'education', name: '教育', type: 'expense', icon: 'book-open', color: '#6366F1' },
-  { id: 'rent', name: '房租', type: 'expense', icon: 'home', color: '#14B8A6' },
-  { id: 'other_expense', name: '其他', type: 'expense', icon: 'puzzle', color: '#64748B' },
-  { id: 'salary', name: '工资', type: 'income', icon: 'briefcase', color: '#10B981' },
-  { id: 'red_packet', name: '红包', type: 'income', icon: 'gift', color: '#F97316' },
-  { id: 'investment', name: '投资回报', type: 'income', icon: 'trending-up', color: '#06B6D4' },
-  { id: 'freelance', name: '兼职', type: 'income', icon: 'wrench', color: '#8B5CF6' },
-  { id: 'other_income', name: '其他', type: 'income', icon: 'gift', color: '#A855F7' },
+  { id: 'food', name: '餐饮', type: 'expense', icon: '🍔', color: '#10B981' },
+  { id: 'transport', name: '交通', type: 'expense', icon: '🚗', color: '#3B82F6' },
+  { id: 'daily', name: '日用', type: 'expense', icon: '🛒', color: '#8B5CF6' },
+  { id: 'entertainment', name: '娱乐', type: 'expense', icon: '🎮', color: '#EC4899' },
+  { id: 'clothes', name: '服饰', type: 'expense', icon: '👕', color: '#F59E0B' },
+  { id: 'medical', name: '医疗', type: 'expense', icon: '💊', color: '#EF4444' },
+  { id: 'education', name: '教育', type: 'expense', icon: '📚', color: '#6366F1' },
+  { id: 'rent', name: '房租', type: 'expense', icon: '🏠', color: '#14B8A6' },
+  { id: 'other_expense', name: '其他', type: 'expense', icon: '❓', color: '#64748B' },
+  { id: 'salary', name: '工资', type: 'income', icon: '💼', color: '#10B981' },
+  { id: 'red_packet', name: '红包', type: 'income', icon: '🧧', color: '#F97316' },
+  { id: 'investment', name: '投资回报', type: 'income', icon: '📈', color: '#06B6D4' },
+  { id: 'freelance', name: '兼职', type: 'income', icon: '🔧', color: '#8B5CF6' },
+  { id: 'other_income', name: '其他', type: 'income', icon: '🎁', color: '#A855F7' },
 ];
 
 // 生成随机账单数据

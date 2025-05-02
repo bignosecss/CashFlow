@@ -21,11 +21,11 @@ const Bill = ({ category, amount, date, onPress }: BillItemProps) => {
     >
       <View style={style.categoryContainer}>
         <View style={style.icon}>
-          {category && React.createElement(getLucideIcon(kebabToPascalCase(category.icon)), {
-            size: theme.typography.h1,
-            color: category.color,
-            strokeWidth: 1.5,
-          })}
+          {category && (
+            <Text style={{ fontSize: theme.typography.h1, color: category.color }}>
+              {category.icon}
+            </Text>
+          )}
         </View>
         <Text style={style.categoryText}>{category?.name}</Text>
       </View>

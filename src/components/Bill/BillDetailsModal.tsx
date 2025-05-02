@@ -1,7 +1,5 @@
 import React from 'react';
 import { Modal, View, Text, Pressable, ScrollView } from 'react-native';
-import { getLucideIcon } from '@/utils/icons';
-import { kebabToPascalCase } from '@/utils/PascalCase';
 import { theme } from '@/theme/theme';
 import { Category } from '@/database/categories';
 
@@ -61,11 +59,9 @@ const BillDetailsModal = ({ visible, onClose, bill }: BillDetailsModalProps) => 
                 alignItems: 'center',
                 marginRight: theme.spacing.medium,
               }}>
-                {React.createElement(getLucideIcon(kebabToPascalCase(bill.category.icon)), {
-                  size: theme.typography.h1,
-                  color: bill.category.color,
-                  strokeWidth: 1.5,
-                })}
+                <Text style={{ fontSize: theme.typography.h1, color: bill.category.color }}>
+                  {bill.category.icon}
+                </Text>
               </View>
               <Text style={{
                 fontSize: theme.typography.h2,

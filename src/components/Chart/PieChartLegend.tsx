@@ -4,8 +4,6 @@ import { theme } from '@/theme/theme';
 import ContentWrapper from '@/components/ContentWrapper';
 import { PieChart } from 'react-native-gifted-charts';
 import { defaultCategories } from '@/database/categories';
-import { getLucideIcon } from '@/utils/icons';
-import { kebabToPascalCase } from '@/utils/PascalCase';
 import { pieStyles as styles } from './pieStyle';
 
 const PieChartLegend = () => {
@@ -38,10 +36,9 @@ const PieChartLegend = () => {
           {pieData.map((item, index) => {
             return (
               <View key={index} style={styles.legendItem}>
-                {React.createElement(getLucideIcon(kebabToPascalCase(item.category.icon)), {
-                  size: 20,
-                  color: item.category.color,
-                })}
+                <Text style={{ fontSize: 20, color: item.category.color }}>
+                  {item.category.icon}
+                </Text>
                 <Text style={styles.legendText}>{item.category.name}</Text>
                 <Text style={styles.percentageText}>{item.value + ' %'}</Text>
               </View>

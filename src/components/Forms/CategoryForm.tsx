@@ -16,11 +16,11 @@ const CategoryForm = ({ category, onPress, isDropdownOpen }: CategoryFormProps) 
   return (
     <BaseForm
       label="分类"
-      icon={React.createElement(getLucideIcon(kebabToPascalCase(category.icon)), {
-        size: theme.typography.h1,
-        color: category.color,
-        strokeWidth: 1.5,
-      })}
+      icon={
+        <Text style={{ fontSize: theme.typography.h1, color: category.color }}>
+          {category.icon}
+        </Text>
+      }
     >
       <Pressable
         style={styles.container}

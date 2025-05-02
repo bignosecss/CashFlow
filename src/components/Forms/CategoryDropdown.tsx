@@ -1,7 +1,5 @@
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { getLucideIcon } from '@/utils/icons';
-import { kebabToPascalCase } from '@/utils/PascalCase';
 import { theme } from '@/theme/theme';
 import { Category } from '@/database/categories';
 
@@ -12,7 +10,9 @@ interface CategoryDropdownProps {
 }
 
 const CategoryDropdown = ({ categories, onSelect, visible }: CategoryDropdownProps) => {
-  if (!visible) {return null;}
+  if (!visible) {
+    return null;
+  }
 
   return (
     <ScrollView
@@ -29,11 +29,9 @@ const CategoryDropdown = ({ categories, onSelect, visible }: CategoryDropdownPro
           onPress={() => onSelect(category)}
         >
           <View style={styles.optionContent}>
-            {React.createElement(getLucideIcon(kebabToPascalCase(category.icon)), {
-              size: theme.typography.h1,
-              color: category.color,
-              strokeWidth: 1.5,
-            })}
+            <Text style={{ fontSize: theme.typography.h1, color: category.color }}>
+              {category.icon}
+            </Text>
             <Text style={styles.optionText}>{category.name}</Text>
           </View>
         </Pressable>
