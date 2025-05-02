@@ -85,9 +85,9 @@ const Calendar = ({
               textDayFontFamily: theme.typography.fontFamily.regular,
               textMonthFontFamily: theme.typography.fontFamily.medium,
               textDayHeaderFontFamily: theme.typography.fontFamily.medium,
-              textDayFontSize: theme.typography.caption - 2,
-              textMonthFontSize: theme.typography.caption,
-              textDayHeaderFontSize: theme.typography.caption - 2,
+              textDayFontSize: theme.typography.caption + 2,
+              textMonthFontSize: theme.typography.caption + 2,
+              textDayHeaderFontSize: theme.typography.caption + 2,
             }}
           />
         </View>
