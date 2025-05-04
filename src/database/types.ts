@@ -3,7 +3,7 @@ import { SQLiteDatabase } from 'react-native-sqlite-storage';
 export interface Bill {
   id: number;
   amount: number;
-  category_id: string;
+  category_id: number;
   date: string;
   note: string;
 }

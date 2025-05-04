@@ -6,61 +6,61 @@ import {defaultCategories} from './categories';
 // 手动创建的测试账单数据
 const mockBills = [
   {
-    category: defaultCategories.find(c => c.id === 'food')!,
+    categoryName: '餐饮',
     amount: '-35.50',
     date: '2025-05-01',
     description: '午餐'
   },
   {
-    category: defaultCategories.find(c => c.id === 'transport')!,
+    categoryName: '交通',
     amount: '-8.00',
     date: '2025-05-01',
     description: '地铁通勤'
   },
   {
-    category: defaultCategories.find(c => c.id === 'salary')!,
+    categoryName: '工资',
     amount: '+15000.00',
     date: '2025-05-05',
     description: '工资收入'
   },
   {
-    category: defaultCategories.find(c => c.id === 'rent')!,
+    categoryName: '房租',
     amount: '-3500.00',
     date: '2025-05-10',
     description: '房租'
   },
   {
-    category: defaultCategories.find(c => c.id === 'education')!,
+    categoryName: '教育',
     amount: '-299.00',
     date: '2025-05-12',
     description: '在线课程'
   },
   {
-    category: defaultCategories.find(c => c.id === 'entertainment')!,
+    categoryName: '娱乐',
     amount: '-120.00',
     date: '2025-05-15',
     description: '电影票'
   },
   {
-    category: defaultCategories.find(c => c.id === 'investment')!,
+    categoryName: '投资回报',
     amount: '+500.00',
     date: '2025-05-18',
     description: '投资收益'
   },
   {
-    category: defaultCategories.find(c => c.id === 'daily')!,
+    categoryName: '日用',
     amount: '-85.30',
     date: '2025-05-20',
     description: '日用品采购'
   },
   {
-    category: defaultCategories.find(c => c.id === 'medical')!,
+    categoryName: '医疗',
     amount: '-120.00',
     date: '2025-05-22',
     description: '药品'
   },
   {
-    category: defaultCategories.find(c => c.id === 'freelance')!,
+    categoryName: '兼职',
     amount: '+2000.00',
     date: '2025-05-25',
     description: '兼职收入'
@@ -162,7 +162,7 @@ export const initBills = async (db: SQLiteDatabase): Promise<void> => {
         `CREATE TABLE IF NOT EXISTS bills (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           amount REAL NOT NULL,
-          category_id TEXT NOT NULL,
+          category_id INTEGER NOT NULL,
           date TEXT NOT NULL,
           note TEXT,
           FOREIGN KEY (category_id) REFERENCES categories (id)
@@ -197,17 +197,35 @@ export const initMockBills = async (db: SQLiteDatabase): Promise<void> => {
 
       // 插入新的测试数据
       mockBills.forEach(bill => {
+        // First get category id by name
         tx.executeSql(
-        'INSERT INTO bills (amount, category_id, date, note) VALUES (?, ?, ?, ?)',
-        [
-            parseFloat(bill.amount.replace(/[+-]/g, '')),
-            bill.category.id,
-            bill.date,
-            bill.description
-        ],
-          () => {},
+          'SELECT id FROM categories WHERE name = ?',
+          [bill.categoryName],
+          (_: Transaction, result: ResultSet) => {
+            const categoryId = result.rows.raw()[0]?.id;
+            if (!categoryId) {
+              console.error(`Category not found: ${bill.categoryName}`);
+              return;
+            }
+            
+            // Then insert bill with category id
+            tx.executeSql(
+              'INSERT INTO bills (amount, category_id, date, note) VALUES (?, ?, ?, ?)',
+              [
+                parseFloat(bill.amount.replace(/[+-]/g, '')),
+                categoryId,
+                bill.date,
+                bill.description
+              ],
+              () => {},
+              (_: Transaction, error: SQLError) => {
+                console.error('Error inserting mock bill', error);
+                return false;
+              }
+            );
+          },
           (_: Transaction, error: SQLError) => {
-            console.error('Error inserting mock bill', error);
+            console.error('Error finding category', error);
             return false;
           }
         );

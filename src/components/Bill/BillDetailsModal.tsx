@@ -124,7 +124,7 @@ const BillDetailsModal = ({ visible, onClose, bill }: BillDetailsModalProps) => 
                   color: theme.colors.textPrimary,
                   fontFamily: theme.typography.fontFamily.regular,
                 }}>
-                  {bill.description}weqwasdasdasweqwasdasdasweqwasdasdasweqwasdasdasweqwasdasdasweqwasdasdasweqwasdasdasweqwasdasdas
+                  {bill.description}
                 </Text>
               </View>
             )}
