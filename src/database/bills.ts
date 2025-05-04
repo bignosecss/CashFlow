@@ -98,7 +98,10 @@ export const getBills = async (): Promise<BillWithCategory[]> => {
          JOIN categories c ON b.category_id = c.id
          ORDER BY date DESC`,
         [],
-        (_: Transaction, result: ResultSet) => resolve(result.rows.raw()),
+        (_: Transaction, result: ResultSet) => {
+          const data = result.rows.raw();
+          resolve(data.length ? data : []);
+        },
         (_: Transaction, error: SQLError) => {
           console.error('Error getting bills', error);
           reject(error);
@@ -228,7 +231,10 @@ export const getBillsByMonth = async (year: number, month: number): Promise<Bill
          WHERE strftime('%Y-%m', date) = ?
          ORDER BY date DESC`,
         [`${year}-${monthStr}`],
-        (_: Transaction, result: ResultSet) => resolve(result.rows.raw()),
+        (_: Transaction, result: ResultSet) => {
+          const data = result.rows.raw();
+          resolve(data.length ? data : []);
+        },
         (_: Transaction, error: SQLError) => {
           console.error('Error getting bills by month:', error.message);
           reject(new Error(`Failed to get bills by month: ${error.message}`));
@@ -252,7 +258,10 @@ export const getBillsByDate = async (date: string): Promise<BillWithCategory[]> 
          WHERE date = ?
          ORDER BY date DESC`,
         [date],
-        (_: Transaction, result: ResultSet) => resolve(result.rows.raw()),
+        (_: Transaction, result: ResultSet) => {
+          const data = result.rows.raw();
+          resolve(data.length ? data : []);
+        },
         (_: Transaction, error: SQLError) => {
           console.error('Error getting bills:', error.message);
           reject(new Error(`Failed to get bills: ${error.message}`));
