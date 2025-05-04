@@ -1,3 +1,5 @@
+import {SQLiteDatabase, Transaction, SQLError} from 'react-native-sqlite-storage';
+
 export type Category = {
   id: string;
   name: string;
@@ -23,38 +25,40 @@ export const defaultCategories: Category[] = [
   { id: 'other_income', name: '其他', type: 'income', icon: '🎁', color: '#A855F7' },
 ];
 
-// 生成随机账单数据
-export const generateMockBills = (count: number) => {
-  const categories = defaultCategories;
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
-  
-  return Array.from({ length: count }, (_, i) => {
-    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-    const isIncome = randomCategory.id === 'salary' || randomCategory.id === 'investment';
-    const amount = isIncome
-      ? `+${(Math.random() * 10000).toFixed(2)}`
-      : `-${(Math.random() * 500).toFixed(2)}`;
+// 初始化分类表
+export const initCategories = async (db: SQLiteDatabase): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS categories (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          type TEXT CHECK(type IN ('income', 'expense')) NOT NULL,
+          icon TEXT NOT NULL,
+          color TEXT NOT NULL
+        );`,
+        [],
+        () => {},
+        (_: Transaction, error: SQLError) => {
+          console.error('Error creating categories table', error);
+          reject(error);
+          return false;
+        }
+      );
 
-    // Generate dates within current month
-    const day = Math.floor(Math.random() * 30) + 1;
-    const date = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    
-    return {
-      id: `bill_${i}`,
-      category: randomCategory,
-      amount,
-      date,
-      description: isIncome
-        ? ['工资收入', '投资收益', '兼职收入'][Math.floor(Math.random() * 3)]
-        : ['午餐', '地铁票', '电影票', '日用品', '房租', '网课'][Math.floor(Math.random() * 6)],
-    };
+      // 插入默认分类数据
+      defaultCategories.forEach(category => {
+        tx.executeSql(
+          'INSERT OR IGNORE INTO categories (id, name, type, icon, color) VALUES (?, ?, ?, ?, ?)',
+          [category.id, category.name, category.type, category.icon, category.color],
+          () => {},
+          (_: Transaction, error: SQLError) => {
+            console.error('Error inserting default category', error);
+            return false;
+          }
+        );
+      });
+      resolve();
+    });
   });
 };
-
-// 生成50条测试数据
-export const mockBills = generateMockBills(50).filter(bill => bill.category);
-
-// 按日期降序排序（最近的在前）
-mockBills.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
