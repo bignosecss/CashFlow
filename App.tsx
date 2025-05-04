@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { initDatabase } from '@/database/db';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -21,6 +22,13 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+
+  useEffect(() => {
+    console.log('Initializing database...');
+    initDatabase()
+      .then(success => console.log('Database initialized:', success))
+      .catch(err => console.error('Database initialization failed:', err));
+  }, []);
 
   return (
     <SafeAreaProvider>

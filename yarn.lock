@@ -2620,6 +2620,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-sqlite-storage@npm:^6.0.5":
+  version: 6.0.5
+  resolution: "@types/react-native-sqlite-storage@npm:6.0.5"
+  checksum: 192d4c3e2d93ea59f59387b8eb8d0aca3da32acca441aa5f84b2f4d919fc52aaa088ab5eb319ceec8471e58107d7463c56c733bfe5ff58915ac03b45313b6450
+  languageName: node
+  linkType: hard
+
 "@types/react-test-renderer@npm:^19.0.0":
   version: 19.1.0
   resolution: "@types/react-test-renderer@npm:19.1.0"
@@ -3011,6 +3018,7 @@ __metadata:
     "@react-navigation/native-stack": ^7.3.10
     "@types/jest": ^29.5.13
     "@types/react": ^19.0.0
+    "@types/react-native-sqlite-storage": ^6.0.5
     "@types/react-test-renderer": ^19.0.0
     babel-plugin-module-resolver: ^5.0.2
     eslint: ^8.19.0
@@ -3025,6 +3033,7 @@ __metadata:
     react-native-linear-gradient: ^2.8.3
     react-native-safe-area-context: ^5.3.0
     react-native-screens: ^4.10.0
+    react-native-sqlite-storage: ^6.0.1
     react-native-svg: ^15.11.2
     react-test-renderer: 19.0.0
     typescript: 5.0.4
@@ -8243,6 +8252,15 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 291f3024eabbb02b3299d4afafba6812f7a1dcd95f762b9be80fa9a69b20650d66a72e64f339776eb4b72e759a1b2201bb80a8501d90f9b4f4d42f19d6c09d5a
+  languageName: node
+  linkType: hard
+
+"react-native-sqlite-storage@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "react-native-sqlite-storage@npm:6.0.1"
+  peerDependencies:
+    react-native: ">=0.14.0"
+  checksum: 79bd454682beb22cdfb5a234b9d52b454d0451dccf03a3c15b70b9c331b32cf0066703652b0d23707bda9b9b4c8063e92d31084171af3ea647855b5d727746e0
   languageName: node
   linkType: hard
 
