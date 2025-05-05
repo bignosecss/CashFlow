@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StyleSheet, Dimensions, StatusBar, View, Alert } from 'react-native';
+import { StyleSheet, Dimensions, StatusBar, View } from 'react-native';
 import { useCallback, useState, useEffect } from 'react';
 import { useAddBill } from '@/hooks/useAddBill';
 import { useFocusEffect } from '@react-navigation/native';
@@ -22,7 +22,9 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
   const [note, setNote] = useState('');
   const { selectedDate, setSelectedDate } = useDateStore();
   const { categories, selectedCategory, setSelectedCategory } = useCategoryStore();
-  const { addBill, isPending } = useAddBill();
+  const { addBill, isPending } = useAddBill(() => {
+    navigation.goBack();
+  });
 
   const handleSaveBill = () => {
     if (!amount || !selectedCategory || !selectedDate) {
@@ -41,7 +43,6 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
       note: note || ''
     };
     addBill(billToAdd);
-    navigation.goBack();
   };
 
   // Hide the status bar on this Screen

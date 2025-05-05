@@ -1,7 +1,6 @@
 import {SQLiteDatabase, Transaction, SQLError} from 'react-native-sqlite-storage';
 import {Bill, BillWithCategory, ResultSet} from './types';
 import {getDatabase} from './db';
-import {defaultCategories} from './categories';
 
 // 手动创建的测试账单数据
 const mockBills = [

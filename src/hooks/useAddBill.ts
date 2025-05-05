@@ -3,7 +3,7 @@ import { addBill as addBillToDatabase } from '@/database/bills';
 import { Bill } from '@/database/types';
 import Toast from 'react-native-toast-message';
 
-export const useAddBill = () => {
+export const useAddBill = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -15,6 +15,7 @@ export const useAddBill = () => {
         text1: '成功',
         text2: '账单添加成功'
       });
+      onSuccess?.();
     },
     onError: (error) => {
       console.error('添加账单失败:', error);
