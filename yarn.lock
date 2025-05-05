@@ -3126,6 +3126,7 @@ __metadata:
     react-native-screens: ^4.10.0
     react-native-sqlite-storage: ^6.0.1
     react-native-svg: ^15.11.2
+    react-native-toast-message: ^2.3.0
     react-test-renderer: 19.0.0
     typescript: 5.0.4
     zustand: ^5.0.4
@@ -8381,6 +8382,16 @@ __metadata:
   version: 1.0.5
   resolution: "react-native-swipe-gestures@npm:1.0.5"
   checksum: d637bc40baa50fa0ce3b6cf2b494efeceaea03cc3875cb7cf7d76922914a21d5e6b098d4a084fb291ce61bfbb0a241c03cff24b15bebf0cfae1c146f4ad10d92
+  languageName: node
+  linkType: hard
+
+"react-native-toast-message@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "react-native-toast-message@npm:2.3.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: f62e6959545ad2193432d6dbe7a2d02c5ce9e546fba1e70dd3fca026a8766c5a34a3f57492ba012c626e284add7c439a6dfec39f273c3fbf05e9bddb59527e72
   languageName: node
   linkType: hard
 

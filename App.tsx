@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import Toast from 'react-native-toast-message';
 import { initDatabase } from '@/database/db';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -45,6 +46,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name="Analytics" component={AnalyticsScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
         </NavigationContainer>
+        <Toast />
       </SafeAreaProvider>
     </QueryClientProvider>
   );

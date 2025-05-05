@@ -12,6 +12,7 @@ export const theme = {
     success: '#10B981',
     warning: '#F59E0B',
     error: '#EF4444',
+    disabled: '#9CA3AF',
   },
   typography: {
     h1: 24,

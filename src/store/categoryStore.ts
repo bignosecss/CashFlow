@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 export type Category = {
   id: number;
@@ -32,17 +31,10 @@ const defaultCategories: Omit<Category, 'id'>[] = [
   { name: '其他', type: 'income', icon: '🎁', color: '#A855F7' },
 ];
 
-const useCategoryStore = create<CategoryState>()(
-  persist(
-    (set) => ({
-      categories: defaultCategories.map((cat, idx) => ({ ...cat, id: idx })),
-      selectedCategory: null,
-      setSelectedCategory: (category) => set({ selectedCategory: category }),
-    }),
-    {
-      name: 'category-storage',
-    }
-  )
-);
+const useCategoryStore = create<CategoryState>()((set) => ({
+  categories: defaultCategories.map((cat, idx) => ({ ...cat, id: idx })),
+  selectedCategory: null,
+  setSelectedCategory: (category) => set({ selectedCategory: category }),
+}));
 
 export default useCategoryStore;
