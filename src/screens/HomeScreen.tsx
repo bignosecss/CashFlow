@@ -23,6 +23,16 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     onDateSelect,
   } = useBills();
 
+  const incomeAmount = bills
+    .filter(bill => bill.category.type === 'income')
+    .reduce((sum, bill) => sum + parseFloat(bill.amount), 0)
+    .toFixed(2);
+
+  const expenseAmount = bills
+    .filter(bill => bill.category.type === 'expense')
+    .reduce((sum, bill) => sum + parseFloat(bill.amount), 0)
+    .toFixed(2);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -31,8 +41,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       >
         <ListHeader
           username="pterosaurscannotfly"
-          incomeAmount="3,500.00"
-          expenseAmount="2,300.00"
+          incomeAmount={incomeAmount}
+          expenseAmount={expenseAmount}
           onAnalyticsPress={() => navigation.navigate('Analytics')}
           onCalendarPress={() => setShowCalendar(true)}
           selectedDate={selectedDate}
