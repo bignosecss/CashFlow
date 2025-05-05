@@ -21,7 +21,6 @@ export const initDatabase = async (): Promise<boolean> => {
     await import('./categories').then(({initCategories}) => initCategories(db));
     const bills = await import('./bills');
     await bills.initBills(db);
-    await bills.initMockBills(db);
     
     return true;
   } catch (error) {

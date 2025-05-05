@@ -24,6 +24,27 @@ export const defaultCategories: Category[] = [
   { id: 13, name: '兼职', type: 'income', icon: '🔧', color: '#8B5CF6' },
 ];
 
+// 获取所有分类
+export const getAllCategories = async (db: SQLiteDatabase): Promise<Category[]> => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'SELECT * FROM categories ORDER BY id',
+        [],
+        (_, result) => {
+          const data = result.rows.raw();
+          resolve(data.length ? data : []);
+        },
+        (_, error) => {
+          console.error('Error getting categories', error);
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
+};
+
 // 初始化分类表
 export const initCategories = async (db: SQLiteDatabase): Promise<void> => {
   return new Promise((resolve, reject) => {

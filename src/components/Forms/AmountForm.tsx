@@ -9,7 +9,6 @@ interface AmountFormPropType {
 }
 
 const AmountForm = ({ amount, onChangeText }: AmountFormPropType) => {
-  console.log('AmountForm渲染');
   return (
     <BaseForm label="金额" icon={<JapaneseYen size={24} color={theme.colors.textPrimary} strokeWidth={1.5} />}>
       <TextInput

@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, Dimensions, StatusBar, View, Alert } from 'react-native';
 import { useCallback, useState, useEffect } from 'react';
-import { addBill } from '@/database/bills';
+import { useAddBill } from '@/hooks/useAddBill';
 import { useFocusEffect } from '@react-navigation/native';
 import { RootStackParamList } from 'App';
 import ContentWrapper from '@/components/ContentWrapper';
@@ -22,8 +22,9 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
   const [note, setNote] = useState('');
   const { selectedDate, setSelectedDate } = useDateStore();
   const { categories, selectedCategory, setSelectedCategory } = useCategoryStore();
+  const { addBill, isPending } = useAddBill();
 
-  const handleSaveBill = async () => {
+  const handleSaveBill = () => {
     if (!amount || !selectedCategory || !selectedDate) {
       Toast.show({
         type: 'error',
@@ -33,21 +34,14 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
       return;
     }
 
-    try {
-      const billToAdd: Omit<Bill, 'id'> = {
-        amount: parseFloat(amount),
-        category_id: selectedCategory.id,
-        date: selectedDate,
-        note: note || ''
-      };
-      console.log('bill to be added: ', billToAdd);
-      await addBill(billToAdd);
-      Alert.alert('成功', '账单添加成功');
-      navigation.goBack();
-    } catch (error) {
-      console.error('Error adding bill:', error);
-      Alert.alert('错误', '添加账单失败');
-    }
+    const billToAdd: Omit<Bill, 'id'> = {
+      amount: parseFloat(amount),
+      category_id: selectedCategory.id,
+      date: selectedDate,
+      note: note || ''
+    };
+    addBill(billToAdd);
+    navigation.goBack();
   };
 
   // Hide the status bar on this Screen
