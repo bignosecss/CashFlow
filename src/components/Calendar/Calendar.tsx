@@ -7,7 +7,7 @@ interface CalendarProps {
   visible: boolean;
   onClose: () => void;
   onDateSelect: (date: string) => void;
-  selectedDate?: string;
+  selectedDate: string;
 }
 
 // 配置中文语言
@@ -26,10 +26,8 @@ const Calendar = ({
   onDateSelect,
   selectedDate,
 }: CalendarProps) => {
-  const [currentDate, setCurrentDate] = useState(selectedDate || new Date().toISOString().split('T')[0]);
 
   const handleDayPress = (day: DateData) => {
-    setCurrentDate(day.dateString);
     onDateSelect(day.dateString);
     onClose();
   };
@@ -58,10 +56,10 @@ const Calendar = ({
             width: '90%',
         }}>
           <RNCalendar
-            current={currentDate}
+            current={selectedDate}
             onDayPress={handleDayPress}
             markedDates={{
-              [currentDate]: {
+              [selectedDate]: {
                 selected: true,
                 selectedColor: theme.colors.primaryBtn,
               },

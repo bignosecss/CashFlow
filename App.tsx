@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import { initDatabase } from '@/database/db';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -18,6 +19,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import AddBillScreen from './src/screens/AddBillScreen';
 import AnalyticsScreen from './src/screens/AnalyticsScreen';
 
+const queryClient = new QueryClient();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): React.JSX.Element {
@@ -31,8 +33,9 @@ function App(): React.JSX.Element {
   }, []);
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider>
+        <NavigationContainer>
         <StatusBar
           barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         />
@@ -41,8 +44,9 @@ function App(): React.JSX.Element {
           <Stack.Screen name="AddBill" component={AddBillScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Analytics" component={AnalyticsScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </QueryClientProvider>
   );
 }
 

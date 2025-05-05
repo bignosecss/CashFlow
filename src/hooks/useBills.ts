@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import { getBills, getBillsByMonth, getBillsByDate } from '@/database/bills';
+import { useQuery } from '@tanstack/react-query';
+import { getBillsByMonth, getBillsByDate } from '@/database/bills';
 import { Category } from '@/database/categories';
 import { BillWithCategory } from '@/database/types';
-
-type ViewMode = 'monthly' | 'daily';
+import useDateStore from '@/store/dateStore';
 
 interface BillItem {
   id: string;
@@ -13,91 +12,53 @@ interface BillItem {
   description: string;
 }
 
+const mapBillWithCategory = (dbBill: BillWithCategory): BillItem => ({
+  id: dbBill.id.toString(),
+  category: {
+    id: dbBill.category_id,
+    name: dbBill.category_name,
+    type: dbBill.category_type,
+    icon: dbBill.category_icon,
+    color: dbBill.category_color
+  },
+  amount: dbBill.amount.toString(),
+  date: dbBill.date,
+  description: dbBill.note
+});
+
 const useBills = () => {
-  const [bills, setBills] = useState<BillItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>('monthly');
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
+  const { viewMode, selectedDate, setViewMode, setSelectedDate } = useDateStore();
 
-  const mapBillWithCategory = (dbBill: BillWithCategory): BillItem => ({
-    id: dbBill.id.toString(),
-    category: {
-      id: dbBill.category_id,
-      name: dbBill.category_name,
-      type: dbBill.category_type,
-      icon: dbBill.category_icon,
-      color: dbBill.category_color
-    },
-    amount: dbBill.amount.toString(),
-    date: dbBill.date,
-    description: dbBill.note
-  });
+  const queryKey = ['bills', viewMode, selectedDate];
 
-  const loadInitialData = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      let result;
-      if (viewMode === 'monthly') {
-        const date = new Date(selectedDate);
-        result = await getBillsByMonth(date.getFullYear(), date.getMonth() + 1);
-      } else {
-        result = await getBillsByDate(selectedDate);
-      }
-      setBills(result.map(mapBillWithCategory));
-    } catch (error) {
-      console.error('Failed to load bills:', error);
-      setBills([]); // 清空账单列表
-      throw error; // 重新抛出错误以便上层处理
-    } finally {
-      setIsLoading(false);
+  const queryFn = async () => {
+    if (viewMode === 'monthly') {
+      const date = new Date(selectedDate);
+      const result = await getBillsByMonth(date.getFullYear(), date.getMonth() + 1);
+      return result.map(mapBillWithCategory);
+    } else {
+      const result = await getBillsByDate(selectedDate);
+      return result.map(mapBillWithCategory);
     }
-  }, [selectedDate, viewMode]);
+  };
+
+  const { data: bills = [], isLoading } = useQuery({
+    queryKey,
+    queryFn,
+  });
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
     setViewMode('daily');
   };
 
-  const handleViewModeChange = (mode: ViewMode) => {
+  const handleViewModeChange = (mode: 'monthly' | 'daily') => {
     setViewMode(mode);
-    if (mode === 'daily') {
-      setSelectedDate(new Date().toISOString().split('T')[0]);
-    }
   };
-
-  const loadMore = useCallback(async () => {
-    if (isLoading || isLoadingMore || !hasMore) return;
-
-    setIsLoadingMore(true);
-    try {
-      const allBills = await getBills();
-      setBills(prev => [
-        ...prev,
-        ...allBills.slice(prev.length, prev.length + 5).map(mapBillWithCategory)
-      ]);
-      setHasMore(allBills.length > bills.length + 5);
-    } catch (error) {
-      console.error('Failed to load more bills:', error);
-      throw error; // 重新抛出错误以便上层处理
-    } finally {
-      setIsLoadingMore(false);
-    }
-  }, [isLoading, isLoadingMore, hasMore, bills.length]);
-
-  useEffect(() => {
-    loadInitialData();
-  }, [loadInitialData]);
 
   return {
     bills,
     isLoading,
-    isLoadingMore,
-    hasMore,
-    loadMore,
     viewMode,
     selectedDate,
     setViewMode: handleViewModeChange,

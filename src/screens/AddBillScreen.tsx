@@ -8,14 +8,15 @@ import { OtherHeader } from '@/components/Headers';
 import { AmountForm, CategoryForm, DateForm, NoteForm, CategoryDropdown } from '@/components/Forms';
 import { SaveBtn } from '@/components/Buttons';
 import { theme } from '@/theme/theme';
-import { defaultCategories } from '@/database/categories';
+import useDateStore from '@/store/dateStore';
+import useCategoryStore from '@/store/categoryStore';
 
 type AddBillScreenProps = NativeStackScreenProps<RootStackParamList, 'AddBill'>;
 
 const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(defaultCategories[0]);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const { selectedDate, setSelectedDate } = useDateStore();
+  const { categories, selectedCategory, setSelectedCategory } = useCategoryStore();
 
   // Hide the status bar on this Screen
   // Check: https://stackoverflow.com/questions/67900434/how-to-show-or-hide-status-bar-on-different-screens-in-react-native
@@ -45,12 +46,12 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
         {/* 分类表单 */}
         <View style={{ position: 'relative' }}>
           <CategoryForm
-            category={selectedCategory}
+            category={selectedCategory || categories[0]}
             onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}
             isDropdownOpen={showCategoryDropdown}
           />
           <CategoryDropdown
-            categories={defaultCategories}
+            categories={categories}
             onSelect={(category) => {
               setSelectedCategory(category);
               setShowCategoryDropdown(false);

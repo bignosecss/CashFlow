@@ -5,7 +5,7 @@ type ViewMode = 'monthly' | 'daily';
 
 interface ViewModeToggleProps {
   mode: ViewMode;
-  selectedDate?: string;
+  selectedDate: string;
   onModeChange: (mode: ViewMode) => void;
 }
 
