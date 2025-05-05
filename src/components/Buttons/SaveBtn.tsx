@@ -9,7 +9,6 @@ interface SaveBtnProps {
 
 const SaveBtn = ({ onPress, style }: SaveBtnProps) => {
   const handlePress = () => {
-    Alert.alert('保存成功', '账单已保存');
     onPress?.();
   };
 

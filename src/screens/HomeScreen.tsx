@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'App';
 import useBills from '@/hooks/useBills';
-import useScrollPagination from '@/hooks/useScrollPagination';
 import { theme } from '@/theme/theme';
 import { ListHeader } from '@/components/Headers';
 import { BillsList } from '@/components/Bill';
@@ -14,32 +13,36 @@ import Calendar from '@/components/Calendar';
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
-  const scrollViewRef = useRef<ScrollView>(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const {
     bills,
-    isLoadingMore,
-    loadMore,
+    isLoading,
     viewMode,
     selectedDate,
     setViewMode,
     onDateSelect,
   } = useBills();
-  const { handleScroll } = useScrollPagination(loadMore);
+
+  const incomeAmount = bills
+    .filter(bill => bill.category.type === 'income')
+    .reduce((sum, bill) => sum + parseFloat(bill.amount), 0)
+    .toFixed(2);
+
+  const expenseAmount = bills
+    .filter(bill => bill.category.type === 'expense')
+    .reduce((sum, bill) => sum + parseFloat(bill.amount), 0)
+    .toFixed(2);
 
   return (
     <View style={styles.container}>
       <ScrollView
-        ref={scrollViewRef}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={400}
       >
         <ListHeader
           username="pterosaurscannotfly"
-          incomeAmount="3,500.00"
-          expenseAmount="2,300.00"
+          incomeAmount={incomeAmount}
+          expenseAmount={expenseAmount}
           onAnalyticsPress={() => navigation.navigate('Analytics')}
           onCalendarPress={() => setShowCalendar(true)}
           selectedDate={selectedDate}
@@ -56,7 +59,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           onDateSelect={onDateSelect}
           selectedDate={selectedDate}
         />
-        {isLoadingMore && (
+        {isLoading && (
           <View style={{ paddingVertical: theme.spacing.xxlarge }}>
             <ActivityIndicator size="large" color={theme.colors.primaryBtn} />
           </View>

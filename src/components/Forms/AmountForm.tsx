@@ -3,8 +3,12 @@ import { TextInput } from 'react-native';
 import { theme } from '@/theme/theme';
 import BaseForm from './BaseForm';
 
-const AmountForm = () => {
-  console.log('AmountForm渲染');
+interface AmountFormPropType {
+  amount: string;
+  onChangeText: (text: string) => void;
+}
+
+const AmountForm = ({ amount, onChangeText }: AmountFormPropType) => {
   return (
     <BaseForm label="金额" icon={<JapaneseYen size={24} color={theme.colors.textPrimary} strokeWidth={1.5} />}>
       <TextInput
@@ -21,6 +25,8 @@ const AmountForm = () => {
         }}
         placeholderTextColor={theme.colors.textHint}
         keyboardType="numeric"
+        value={amount}
+        onChangeText={onChangeText}
       />
     </BaseForm>
   );

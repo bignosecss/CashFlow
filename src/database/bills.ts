@@ -6,60 +6,70 @@ import {defaultCategories} from './categories';
 // 手动创建的测试账单数据
 const mockBills = [
   {
+    id: 1,
     categoryName: '餐饮',
     amount: '-35.50',
     date: '2025-05-01',
     description: '午餐'
   },
   {
+    id: 2,
     categoryName: '交通',
     amount: '-8.00',
     date: '2025-05-01',
     description: '地铁通勤'
   },
   {
+    id: 3,
     categoryName: '工资',
     amount: '+15000.00',
     date: '2025-05-05',
     description: '工资收入'
   },
   {
+    id: 4,
     categoryName: '房租',
     amount: '-3500.00',
     date: '2025-05-10',
     description: '房租'
   },
   {
+    id: 5,
     categoryName: '教育',
     amount: '-299.00',
     date: '2025-05-12',
     description: '在线课程'
   },
   {
+    id: 6,
     categoryName: '娱乐',
     amount: '-120.00',
     date: '2025-05-15',
     description: '电影票'
   },
   {
+    id: 7,
     categoryName: '投资回报',
     amount: '+500.00',
     date: '2025-05-18',
     description: '投资收益'
   },
   {
+    id: 8,
     categoryName: '日用',
     amount: '-85.30',
     date: '2025-05-20',
     description: '日用品采购'
   },
   {
+    id: 9,
     categoryName: '医疗',
     amount: '-120.00',
     date: '2025-05-22',
     description: '药品'
   },
   {
+    id: 10,
     categoryName: '兼职',
     amount: '+2000.00',
     date: '2025-05-25',
@@ -68,16 +78,85 @@ const mockBills = [
 ];
 
 // 添加账单
-export const addBill = async (bill: Bill): Promise<number> => {
-  const db = await getDatabase();
-  return new Promise((resolve, reject) => {
+// Temporary debug function to list all categories
+const debugListCategories = async (db: SQLiteDatabase) => {
+  return new Promise<void>((resolve) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'INSERT INTO bills (amount, category_id, date, note) VALUES (?, ?, ?, ?)',
-        [bill.amount, bill.category_id, bill.date, bill.note],
-        (_: Transaction, result: ResultSet) => resolve(result.insertId),
+        'SELECT * FROM categories',
+        [],
+        (_: Transaction, result: ResultSet) => {
+          console.log('All categories:', result.rows.raw());
+          resolve();
+        },
+        () => {
+          console.log('Failed to list categories');
+          resolve();
+          return false;
+        }
+      );
+    });
+  });
+};
+
+export const addBill = async (bill: Omit<Bill, 'id'>): Promise<number> => {
+  console.log('db add bill: ', bill);
+  const db = await getDatabase();
+  
+  // Debug: Print all categories and bills first
+  await debugListCategories(db);
+  await new Promise<void>((resolve) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'SELECT * FROM bills',
+        [],
+        (_: Transaction, result: ResultSet) => {
+          console.log('All bills:', result.rows.raw());
+          resolve();
+        },
+        () => {
+          console.log('Failed to list bills');
+          resolve();
+          return false;
+        }
+      );
+    });
+  });
+  
+  // Default to first category if invalid ID (0) is provided
+  const categoryId = bill.category_id <= 0 ? 1 : bill.category_id;
+  if (bill.category_id <= 0) {
+    console.warn(`Invalid category_id (${bill.category_id}), defaulting to 1`);
+  }
+
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      // First verify the category exists
+      tx.executeSql(
+        'SELECT id FROM categories WHERE id = ?',
+        [categoryId],
+        (_: Transaction, result: ResultSet) => {
+          if (result.rows.raw().length === 0) {
+            reject(new Error(`Invalid category_id: ${categoryId}`));
+            return false;
+          }
+          // Category exists, proceed with insert
+          tx.executeSql(
+            'INSERT INTO bills (amount, category_id, date, note) VALUES (?, ?, ?, ?)',
+            [bill.amount, categoryId, bill.date, bill.note],
+            (_: Transaction, result: ResultSet) => resolve(result.insertId),
+            (_: Transaction, error: SQLError) => {
+              console.error('Error adding bill', error);
+              console.error('Failed SQL:', 'INSERT INTO bills (amount, category_id, date, note) VALUES (?, ?, ?, ?)');
+              console.error('With params:', [bill.amount, bill.category_id, bill.date, bill.note]);
+              reject(error);
+              return false;
+            }
+          );
+          return true;
+        },
         (_: Transaction, error: SQLError) => {
-          console.error('Error adding bill', error);
+          console.error('Error verifying category', error);
           reject(error);
           return false;
         }
@@ -183,13 +262,27 @@ export const initBills = async (db: SQLiteDatabase): Promise<void> => {
 export const initMockBills = async (db: SQLiteDatabase): Promise<void> => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      // 清空现有测试数据
+      // 检查是否有现有数据，有则清空
       tx.executeSql(
-        'DELETE FROM bills',
+        'SELECT COUNT(*) as count FROM bills',
         [],
-        () => {},
+        (_: Transaction, result: ResultSet) => {
+          const count = result.rows.raw()[0].count;
+          if (count > 0) {
+            tx.executeSql(
+              'DELETE FROM bills',
+              [],
+              () => {},
+              (_: Transaction, error: SQLError) => {
+                console.error('Error clearing mock bills', error);
+                reject(error);
+                return false;
+              }
+            );
+          }
+        },
         (_: Transaction, error: SQLError) => {
-          console.error('Error clearing mock bills', error);
+          console.error('Error checking bill count', error);
           reject(error);
           return false;
         }
@@ -210,8 +303,9 @@ export const initMockBills = async (db: SQLiteDatabase): Promise<void> => {
             
             // Then insert bill with category id
             tx.executeSql(
-              'INSERT INTO bills (amount, category_id, date, note) VALUES (?, ?, ?, ?)',
+              'INSERT INTO bills (id, amount, category_id, date, note) VALUES (?, ?, ?, ?, ?)',
               [
+                bill.id,
                 parseFloat(bill.amount.replace(/[+-]/g, '')),
                 categoryId,
                 bill.date,
