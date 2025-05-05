@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StyleSheet, Dimensions, StatusBar, View } from 'react-native';
-import { useCallback, useState } from 'react';
+import { StyleSheet, Dimensions, StatusBar, View, Alert } from 'react-native';
+import { useCallback, useState, useEffect } from 'react';
+import { addBill } from '@/database/bills';
 import { useFocusEffect } from '@react-navigation/native';
 import { RootStackParamList } from 'App';
 import ContentWrapper from '@/components/ContentWrapper';
@@ -10,13 +11,44 @@ import { SaveBtn } from '@/components/Buttons';
 import { theme } from '@/theme/theme';
 import useDateStore from '@/store/dateStore';
 import useCategoryStore from '@/store/categoryStore';
+import Toast from 'react-native-toast-message';
+import { Bill } from '@/database/types';
 
 type AddBillScreenProps = NativeStackScreenProps<RootStackParamList, 'AddBill'>;
 
 const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [amount, setAmount] = useState('');
+  const [note, setNote] = useState('');
   const { selectedDate, setSelectedDate } = useDateStore();
   const { categories, selectedCategory, setSelectedCategory } = useCategoryStore();
+
+  const handleSaveBill = async () => {
+    if (!amount || !selectedCategory || !selectedDate) {
+      Toast.show({
+        type: 'error',
+        text1: '错误',
+        text2: '表单未全部填写'
+      });
+      return;
+    }
+
+    try {
+      const billToAdd: Omit<Bill, 'id'> = {
+        amount: parseFloat(amount),
+        category_id: selectedCategory.id,
+        date: selectedDate,
+        note: note || ''
+      };
+      console.log('bill to be added: ', billToAdd);
+      await addBill(billToAdd);
+      Alert.alert('成功', '账单添加成功');
+      navigation.goBack();
+    } catch (error) {
+      console.error('Error adding bill:', error);
+      Alert.alert('错误', '添加账单失败');
+    }
+  };
 
   // Hide the status bar on this Screen
   // Check: https://stackoverflow.com/questions/67900434/how-to-show-or-hide-status-bar-on-different-screens-in-react-native
@@ -31,6 +63,12 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
     };
   }, []));
 
+  useEffect(() => {
+    if (!selectedCategory && categories.length > 0) {
+      setSelectedCategory(categories[0]);
+    }
+  }, []);
+
   return (
     <ContentWrapper style={styles.container}>
       <View>
@@ -41,7 +79,10 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
         />
 
         {/* 输入金额表单 */}
-        <AmountForm />
+        <AmountForm 
+          amount={amount}
+          onChangeText={setAmount}
+        />
 
         {/* 分类表单 */}
         <View style={{ position: 'relative' }}>
@@ -67,11 +108,17 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
         />
 
         {/* 备注表单 */}
-        <NoteForm />
+        <NoteForm 
+          note={note}
+          onChangeText={setNote}
+        />
       </View>
 
       {/* 保存账单按钮 */}
-      <SaveBtn style={{ marginTop: theme.spacing.xlarge }} />
+      <SaveBtn 
+        style={{ marginTop: theme.spacing.xlarge }}
+        onPress={handleSaveBill}
+      />
     </ContentWrapper>
   );
 };

@@ -2,7 +2,12 @@ import { TextInput } from 'react-native';
 import { theme } from '@/theme/theme';
 import BaseForm from './BaseForm';
 
-const NoteForm = () => {
+interface NoteFormPropType {
+  note: string;
+  onChangeText: (text: string) => void;
+}
+
+const NoteForm = ({ note, onChangeText }: NoteFormPropType) => {
   return (
     <BaseForm label="备注">
       <TextInput
@@ -18,6 +23,8 @@ const NoteForm = () => {
         }}
         placeholder="添加备注..."
         placeholderTextColor={theme.colors.textHint}
+        value={note}
+        onChangeText={onChangeText}
       />
     </BaseForm>
   );

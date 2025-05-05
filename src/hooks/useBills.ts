@@ -35,6 +35,7 @@ const useBills = () => {
     if (viewMode === 'monthly') {
       const date = new Date(selectedDate);
       const result = await getBillsByMonth(date.getFullYear(), date.getMonth() + 1);
+      console.log('yes!', result);
       return result.map(mapBillWithCategory);
     } else {
       const result = await getBillsByDate(selectedDate);
