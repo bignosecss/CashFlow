@@ -30,15 +30,15 @@ const useCategoryStore = create<CategoryState>()((set) => ({
     try {
       const db = await getDatabase();
       const categories = await getAllCategories(db);
-      set({ 
-        categories, 
+      set({
+        categories,
         isLoading: false,
-        selectedCategory: categories.length > 0 ? categories[0] : null
+        selectedCategory: categories.length > 0 ? categories[0] : null,
       });
     } catch (error) {
-      set({ 
+      set({
         error: 'Failed to load categories',
-        isLoading: false 
+        isLoading: false,
       });
     }
   },

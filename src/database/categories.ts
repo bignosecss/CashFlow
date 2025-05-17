@@ -79,7 +79,7 @@ export const initCategories = async (db: SQLiteDatabase): Promise<void> => {
                     }
                   );
                 });
-                
+
                 if (insertErrors.length > 0) {
                   reject(new Error(insertErrors.join('\n')));
                   return false;

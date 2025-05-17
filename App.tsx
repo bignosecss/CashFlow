@@ -13,7 +13,7 @@ import {
   StatusBar,
   useColorScheme,
   View,
-  Text
+  Text,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
@@ -63,13 +63,13 @@ function App(): React.JSX.Element {
               shadowOpacity: theme.shadow.shadowOpacity,
               shadowRadius: 4,
               elevation: theme.shadow.elevation + 1,
-              marginTop: theme.spacing.xxlarge
+              marginTop: theme.spacing.xxlarge,
             }}>
-              <Text style={{ 
+              <Text style={{
                 fontSize: theme.typography.body,
                 fontWeight: '600',
                 color: theme.colors.textPrimary,
-                fontFamily: theme.typography.fontFamily.semiBold
+                fontFamily: theme.typography.fontFamily.semiBold,
               }}>
                 {props.text1}
               </Text>
@@ -78,7 +78,7 @@ function App(): React.JSX.Element {
                   fontSize: theme.typography.caption,
                   color: theme.colors.textSecondary,
                   marginTop: theme.spacing.small,
-                  fontFamily: theme.typography.fontFamily.regular
+                  fontFamily: theme.typography.fontFamily.regular,
                 }}>
                   {props.text2}
                 </Text>
@@ -98,28 +98,28 @@ function App(): React.JSX.Element {
               shadowOpacity: theme.shadow.shadowOpacity,
               shadowRadius: 4,
               elevation: theme.shadow.elevation + 1,
-              marginTop: theme.spacing.xxlarge
+              marginTop: theme.spacing.xxlarge,
             }}>
               <Text style={{
                 fontSize: theme.typography.body,
                 fontWeight: '600',
                 color: theme.colors.textPrimary,
-                fontFamily: theme.typography.fontFamily.semiBold
+                fontFamily: theme.typography.fontFamily.semiBold,
               }}>
                 {props.text1}
               </Text>
               {props.text2 && (
-                <Text style={{ 
+                <Text style={{
                   fontSize: theme.typography.caption,
                   color: theme.colors.textSecondary,
                   marginTop: theme.spacing.small,
-                  fontFamily: theme.typography.fontFamily.regular
+                  fontFamily: theme.typography.fontFamily.regular,
                 }}>
                   {props.text2}
                 </Text>
               )}
             </View>
-          )
+          ),
         }} />
       </SafeAreaProvider>
     </QueryClientProvider>

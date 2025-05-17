@@ -9,71 +9,71 @@ const mockBills = [
     categoryName: '餐饮',
     amount: '-35.50',
     date: '2025-05-01',
-    description: '午餐'
+    description: '午餐',
   },
   {
     id: 2,
     categoryName: '交通',
     amount: '-8.00',
     date: '2025-05-01',
-    description: '地铁通勤'
+    description: '地铁通勤',
   },
   {
     id: 3,
     categoryName: '工资',
     amount: '+15000.00',
     date: '2025-05-05',
-    description: '工资收入'
+    description: '工资收入',
   },
   {
     id: 4,
     categoryName: '房租',
     amount: '-3500.00',
     date: '2025-05-10',
-    description: '房租'
+    description: '房租',
   },
   {
     id: 5,
     categoryName: '教育',
     amount: '-299.00',
     date: '2025-05-12',
-    description: '在线课程'
+    description: '在线课程',
   },
   {
     id: 6,
     categoryName: '娱乐',
     amount: '-120.00',
     date: '2025-05-15',
-    description: '电影票'
+    description: '电影票',
   },
   {
     id: 7,
     categoryName: '投资回报',
     amount: '+500.00',
     date: '2025-05-18',
-    description: '投资收益'
+    description: '投资收益',
   },
   {
     id: 8,
     categoryName: '日用',
     amount: '-85.30',
     date: '2025-05-20',
-    description: '日用品采购'
+    description: '日用品采购',
   },
   {
     id: 9,
     categoryName: '医疗',
     amount: '-120.00',
     date: '2025-05-22',
-    description: '药品'
+    description: '药品',
   },
   {
     id: 10,
     categoryName: '兼职',
     amount: '+2000.00',
     date: '2025-05-25',
-    description: '兼职收入'
-  }
+    description: '兼职收入',
+  },
 ];
 
 // 添加账单
@@ -101,7 +101,7 @@ const debugListCategories = async (db: SQLiteDatabase) => {
 export const addBill = async (bill: Omit<Bill, 'id'>): Promise<number> => {
   console.log('db add bill: ', bill);
   const db = await getDatabase();
-  
+
   // Debug: Print all categories and bills first
   await debugListCategories(db);
   await new Promise<void>((resolve) => {
@@ -121,7 +121,7 @@ export const addBill = async (bill: Omit<Bill, 'id'>): Promise<number> => {
       );
     });
   });
-  
+
   // Default to first category if invalid ID (0) is provided
   const categoryId = bill.category_id <= 0 ? 1 : bill.category_id;
   if (bill.category_id <= 0) {
@@ -200,7 +200,7 @@ export const updateBill = async (
     db.transaction((tx) => {
       const fields: string[] = [];
       const values: any[] = [];
-      
+
       Object.entries(updates).forEach(([key, value]) => {
         if (!['amount', 'category_id', 'date', 'note'].includes(key)) {
           return;
@@ -299,7 +299,7 @@ export const initMockBills = async (db: SQLiteDatabase): Promise<void> => {
               console.error(`Category not found: ${bill.categoryName}`);
               return;
             }
-            
+
             // Then insert bill with category id
             tx.executeSql(
               'INSERT INTO bills (id, amount, category_id, date, note) VALUES (?, ?, ?, ?, ?)',
@@ -308,7 +308,7 @@ export const initMockBills = async (db: SQLiteDatabase): Promise<void> => {
                 parseFloat(bill.amount.replace(/[+-]/g, '')),
                 categoryId,
                 bill.date,
-                bill.description
+                bill.description,
               ],
               () => {},
               (_: Transaction, error: SQLError) => {

@@ -27,8 +27,8 @@ const HomeHeader = ({
         >
           <ChartNoAxesColumn size={theme.typography.h1} color={theme.colors.textSecondary} strokeWidth={1.5} />
         </Pressable>
-        <Pressable 
-          style={styles.calendarOptionButton} 
+        <Pressable
+          style={styles.calendarOptionButton}
           onPress={() => {
             onCalendarPress?.();
           }}
@@ -36,7 +36,7 @@ const HomeHeader = ({
           <Text style={styles.calendarOptionText}>
             {selectedDate ? new Date(selectedDate).toLocaleDateString('zh-CN', {
               year: 'numeric',
-              month: 'long'
+              month: 'long',
             }) : '选择日期'}
           </Text>
           <ChevronRight size={theme.typography.h1} color={theme.colors.textSecondary} strokeWidth={1.5} />

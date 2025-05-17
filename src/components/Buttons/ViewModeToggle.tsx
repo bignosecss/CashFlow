@@ -19,13 +19,13 @@ const ViewModeToggle = ({ mode, selectedDate, onModeChange }: ViewModeToggleProp
       <Pressable
         style={[
           styles.button,
-          mode === 'monthly' && styles.activeButton
+          mode === 'monthly' && styles.activeButton,
         ]}
         onPress={() => onModeChange('monthly')}
       >
         <Text style={[
           styles.text,
-          mode === 'monthly' && styles.activeText
+          mode === 'monthly' && styles.activeText,
         ]}>
           月度
         </Text>
@@ -33,13 +33,13 @@ const ViewModeToggle = ({ mode, selectedDate, onModeChange }: ViewModeToggleProp
       <Pressable
         style={[
           styles.button,
-          mode === 'daily' && styles.activeButton
+          mode === 'daily' && styles.activeButton,
         ]}
         onPress={() => onModeChange('daily')}
       >
         <Text style={[
           styles.text,
-          mode === 'daily' && styles.activeText
+          mode === 'daily' && styles.activeText,
         ]}>
           {mode === 'daily' && selectedDate ? formatDate(selectedDate) : '指定日期'}
         </Text>

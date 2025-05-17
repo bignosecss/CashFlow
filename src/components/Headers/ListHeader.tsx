@@ -16,13 +16,13 @@ interface ListHeaderProps {
   selectedDate: string;
 }
 
-const ListHeader = ({ 
-  username, 
-  incomeAmount, 
-  expenseAmount, 
-  onAnalyticsPress, 
+const ListHeader = ({
+  username,
+  incomeAmount,
+  expenseAmount,
+  onAnalyticsPress,
   onCalendarPress,
-  selectedDate
+  selectedDate,
 }: ListHeaderProps) => {
   return (
     <>

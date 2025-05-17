@@ -31,7 +31,7 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
       Toast.show({
         type: 'error',
         text1: '错误',
-        text2: '表单未全部填写'
+        text2: '表单未全部填写',
       });
       return;
     }
@@ -40,7 +40,7 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
       amount: parseFloat(amount),
       category_id: selectedCategory.id,
       date: selectedDate,
-      note: note || ''
+      note: note || '',
     };
     addBill(billToAdd);
   };
@@ -74,7 +74,7 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
         />
 
         {/* 输入金额表单 */}
-        <AmountForm 
+        <AmountForm
           amount={amount}
           onChangeText={setAmount}
         />
@@ -97,20 +97,20 @@ const AddBillScreen = ({ navigation }: AddBillScreenProps) => {
         </View>
 
         {/* 日期表单 */}
-        <DateForm 
+        <DateForm
           initialDate={selectedDate}
           onDateChange={setSelectedDate}
         />
 
         {/* 备注表单 */}
-        <NoteForm 
+        <NoteForm
           note={note}
           onChangeText={setNote}
         />
       </View>
 
       {/* 保存账单按钮 */}
-      <SaveBtn 
+      <SaveBtn
         style={{ marginTop: theme.spacing.xlarge }}
         onPress={handleSaveBill}
       />

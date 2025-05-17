@@ -19,11 +19,11 @@ const mapBillWithCategory = (dbBill: BillWithCategory): BillItem => ({
     name: dbBill.category_name,
     type: dbBill.category_type,
     icon: dbBill.category_icon,
-    color: dbBill.category_color
+    color: dbBill.category_color,
   },
   amount: dbBill.amount.toString(),
   date: dbBill.date,
-  description: dbBill.note
+  description: dbBill.note,
 });
 
 const useBills = () => {
